@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mirim.mvcboard.command.BCommand;
+import com.mirim.mvcboard.command.BContentCommand;
 import com.mirim.mvcboard.command.BListCommand;
 import com.mirim.mvcboard.command.BWriteCommand;
 
@@ -39,5 +40,16 @@ public class BController {			//command만 호출
 		command.execute(model);		// model에 list(ArrayList<BDto> dtos)가 탑재 
 		
 		return "list";
+	}
+	
+	@RequestMapping(value="/content_view")
+	public String content_view(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("request", request);		// request 객체를 modal 담아서 command에 보내버림		
+		
+		command = new BContentCommand();
+		command.execute(model);		// 실행하면 model에 dto란 이름으로 탑재 완료
+		
+		return "content_view";
 	}
 }

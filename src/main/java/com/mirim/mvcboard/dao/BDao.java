@@ -29,7 +29,7 @@ public class BDao {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
+	} // BDao 종료
 	
 	public void write(String bname, String btitle, String bcontent) {  // 사용자가 입력한 3개의 값을 받음
 		Connection conn = null;
@@ -63,7 +63,7 @@ public class BDao {
 				e.printStackTrace();
 			}
 		}
-	}
+	} // write 종료
 	
 	public ArrayList<BDto> list() {  
 		Connection conn = null;
@@ -114,5 +114,59 @@ public class BDao {
 			}
 		}
 		return dtos;		// 만든 리스트를 반환
-	}
+	}	// list 종료
+	
+	
+	public BDto contentView(String strbid) {  	// 하나만 선택해서 보냄, 반환값 O
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		BDto dto = null;			// 생성
+		
+		
+		try {
+			conn = dataSource.getConnection();
+			String sql = "SELECT * FROM mvc_board WHERE bid=?"; // 어느 값이 올지 모르므로 ?처리
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(strbid));// ? 셋팅 (String으로 들어온 strbid를 integer로 형변환=> wper class이용)
+			
+			rs = pstmt.executeQuery();		// 실헹문 (select문은 Query로 실행해야함)
+			
+			while (rs.next()) {			// 더이상 글이 없을때까지 반복해 내용을 뽑고 배열에 차례로 쌓임 (있으면 true, 없으면 false) 
+				int bid = rs.getInt("bid");
+				String bname = rs.getString("bname");
+				String btitle = rs.getString("btitle");
+				String bcontent = rs.getString("bcontent");
+				Timestamp bdate = rs.getTimestamp("bdate");
+				int bhit = rs.getInt("bhit");
+				int bgroup = rs.getInt("bgroup");
+				int bstep = rs.getInt("bstep");
+				int bindent = rs.getInt("bindent");
+				
+				dto = new BDto(bid, bname, btitle, bcontent, bdate, bhit, bgroup, bstep, bindent);
+			}
+		}	
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (rs != null ) {
+					rs.close();
+				}
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return dto;		
+	}	// contentView 종료 
+	
+	
 }

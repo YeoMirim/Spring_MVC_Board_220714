@@ -25,7 +25,7 @@
 			<tr>
 				<td>${dto.bid }</td>
 				<td>${dto.bname }</td>
-				<td>${dto.btitle }</td>
+				<td><a href="content_view?bid=${dto.bid }">${dto.btitle }</a> </td>
 				<td>${dto.bdate }</td>
 				<td>${dto.bhit }</td>
 			</tr>
