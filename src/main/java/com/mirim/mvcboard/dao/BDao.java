@@ -120,6 +120,9 @@ public class BDao {
 	
 	
 	public BDto contentView(String strbid) {  	// 하나만 선택해서 보냄, 반환값 O
+		
+		this.upHit(strbid);  // this=>내 class내의 메소드를 사용하겠다. 해당 글 볼때마다 upHit 메소드를 호출하겠다. 
+		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -236,4 +239,39 @@ public class BDao {
 			}
 		}
 	} // modify 종료
+	
+	
+	
+	private void upHit(String bid) {		// 조회수 조작 금지위해 비공개처리, 반환값 X, 매개변수 O(특정 글만 해당되므로)
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = dataSource.getConnection();
+			String sql = "UPDATE mvc_board SET bhit=bhit+1 WHERE bid=?";  // 어느값이 들어올 지 모르므로 ? 처리함, 누를때마다 씩 증가하게 +1함
+			pstmt = conn.prepareStatement(sql);
+		
+			pstmt.setInt(1, Integer.parseInt(bid));		// integer로 변경해서 값을 넣어줌
+			
+			pstmt.executeUpdate();		// integer 반환할 수 있음, 실헹문
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	} //upHit 종료 (조회수 증가)
 }
