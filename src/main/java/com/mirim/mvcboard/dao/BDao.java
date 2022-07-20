@@ -373,7 +373,7 @@ public class BDao {
 	} // reply 종료	
 	
 	
-	private void replyShape(String strGroup, String strStep) {		// // 댓글 재정렬,  반환값 X, 매개변수 O(특정 글만 해당되므로)
+	private void replyShape(String strGroup, String strStep) {		// 댓글 재정렬,  반환값 X, 매개변수 O(특정 글만 해당되므로)
 		
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -381,7 +381,7 @@ public class BDao {
 		try {
 			conn = dataSource.getConnection();
 			String sql = "UPDATE mvc_board SET bstep=bstep+1 WHERE bgroup=? and bstep > ?"; 
-			// 같은 Group의 글에 댓글이 달리면 댓글의 다음 글들은 bstep값이 1씩 증가해서 작성한 댓글이 중간에 끼어들어갈 수 있게 함
+			// 같은 Group의 글에 댓글이 달리면 작성한 댓글의 다음 댓글들은 bstep값이 1씩 증가해서 작성한 댓글이 중간에 끼어들어갈 수 있게 함
 			pstmt = conn.prepareStatement(sql);
 		
 			pstmt.setInt(1, Integer.parseInt(strGroup));		// integer로 변경해서 값을 넣어줌
@@ -406,5 +406,5 @@ public class BDao {
 				e.printStackTrace();
 			}
 		}
-	} //upHit 종료 (조회수 증가)
+	} // replyShape 종료 (조회수 증가)
 }
