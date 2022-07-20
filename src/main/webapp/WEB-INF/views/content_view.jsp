@@ -6,8 +6,8 @@
 <meta charset="UTF-8">
 <title>글 내용 보기</title>
 </head>
-
 <body>
+
 	<h2>글 내용 보기</h2>
 	<hr>
 	<table width="500" cellpadding="0" cellspacing="0" border="1">
@@ -29,6 +29,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" align="right">
+						<input type="button" value="답변" onclick="location.href='reply_view?bid='+${dto.bid }">  <!-- 댓글기능 추가 (기존 글 내용 + 내가 쓸 내용의 폼) -->
 						<input type="submit" value="수정"> <!-- modify 요청이 들어감, 해당 글의 번호만 넘겨줘야함 -->
 						<input type="button" value="삭제" onclick="location.href='delete?bid='+${dto.bid }">  <!-- 표현식으로 삭제할 글의 bid값을 줌 --> 
 						<!-- <a href="delete?bid=${dto.bid }">삭제</a> -->  <!-- bid 값이 날아가야 해당 글이 삭제됨  -->
