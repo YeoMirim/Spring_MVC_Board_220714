@@ -9,7 +9,7 @@
 </head>
 <body>
 
-	<h2>게시간 글 목록</h2>
+	<h2>게시판 글 목록</h2>
 	<hr>
 	<table width="800" cellpadding="0" cellspacing="0" border="1">
 		<tr align="center" bgcolor="">
