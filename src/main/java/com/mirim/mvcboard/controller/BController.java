@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.mirim.mvcboard.command.BCommand;
 import com.mirim.mvcboard.command.BContentCommand;
+import com.mirim.mvcboard.command.BDeleteCommand;
 import com.mirim.mvcboard.command.BListCommand;
+import com.mirim.mvcboard.command.BModifyCommand;
 import com.mirim.mvcboard.command.BWriteCommand;
 
 @Controller
@@ -51,5 +53,29 @@ public class BController {			//command만 호출
 		command.execute(model);		// 실행하면 model에 dto란 이름으로 탑재 완료
 		
 		return "content_view";
+	}
+	
+	@RequestMapping (value="/delete")
+	public String delete(HttpServletRequest request, Model model) {
+		
+		model.addAttribute("request", request);		// request 객체를 modal 담아서 command에 보내버림		
+		
+		command = new BDeleteCommand();
+		command.execute(model);		// 실행하면 model에 dao란 이름으로 탑재 완료
+		
+		
+		return "redirect:list";		// reload된 list를 불러옴
+	}
+	
+	
+	@RequestMapping (value="/modify")
+	public String modify(HttpServletRequest request, Model model) { // 매개변수 받아야함
+		
+model.addAttribute("request", request);		// request 객체를 modal 담아서 command에 보내버림		
+		
+		command = new BModifyCommand();
+		command.execute(model);		// 실행하면 model에 dao란 이름으로 탑재 완료
+		
+		return "redirect:list";		// list로 돌아가서 수정된 내용 확인 가능 (content_view로 돌아가도 됨)
 	}
 }

@@ -32,7 +32,7 @@
 		</c:forEach>
 		
 		<tr align="right">
-			<td colspan="5"><input type="button" value="글작성" onclick="locationhref='write_from'"></td>
+			<td colspan="5"><input type="button" value="글작성" onclick="location.href='write_form'"></td>
 		</tr>
 	</table>
 	

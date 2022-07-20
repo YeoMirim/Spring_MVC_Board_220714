@@ -31,6 +31,7 @@ public class BDao {
 		}
 	} // BDao 종료
 	
+	
 	public void write(String bname, String btitle, String bcontent) {  // 사용자가 입력한 3개의 값을 받음
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -38,7 +39,7 @@ public class BDao {
 		try {
 			conn = dataSource.getConnection();
 			String sql = "INSERT INTO mvc_board(bid, bname, btitle, bcontent, bhit, bgroup, bstep, bindent) "
-					+ "VALUES (mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0)";
+					+ "VALUES (mvc_board_seq.nextval, ?, ?, ?, 0, mvc_board_seq.currval, 0, 0)";  // bid는 시퀀스, bgroup은 현재 글의 값
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, bname);
 			pstmt.setString(2, btitle);
@@ -65,6 +66,7 @@ public class BDao {
 		}
 	} // write 종료
 	
+	
 	public ArrayList<BDto> list() {  
 		Connection conn = null;
 		PreparedStatement pstmt = null;
@@ -79,7 +81,7 @@ public class BDao {
 			
 			rs = pstmt.executeQuery();		// 실헹문 (select문은 Query로 실행해야함)
 			
-			while (rs.next()) {			// 더이상 글이 없을때까지 반복해 내용을 뽑고 배열에 차례로 쌓임 (있으면 true, 없으면 false) 
+			while (rs.next()) {			// 더이상 글이 없을때까지 반복해 내용을 뽑고 배열에 차례로 쌓임 (있으면 true, 없으면 false) , 글의 개수만큼 반복
 				int bid = rs.getInt("bid");
 				String bname = rs.getString("bname");
 				String btitle = rs.getString("btitle");
@@ -128,7 +130,7 @@ public class BDao {
 			conn = dataSource.getConnection();
 			String sql = "SELECT * FROM mvc_board WHERE bid=?"; // 어느 값이 올지 모르므로 ?처리
 			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, Integer.parseInt(strbid));// ? 셋팅 (String으로 들어온 strbid를 integer로 형변환=> wper class이용)
+			pstmt.setInt(1, Integer.parseInt(strbid));// ? 셋팅 (String으로 들어온 strbid를 integer로 형변환=> weper class이용)
 			
 			rs = pstmt.executeQuery();		// 실헹문 (select문은 Query로 실행해야함)
 			
@@ -169,4 +171,69 @@ public class BDao {
 	}	// contentView 종료 
 	
 	
+	public void delete(String strbid) {  	// 반환값 X
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = dataSource.getConnection();
+			String sql = "DELETE FROM mvc_board WHERE bid=?"; // 어느 값이 올지 모르므로 ?처리
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(strbid));// ? 셋팅 (String으로 들어온 strbid를 integer로 형변환=> weper class이용)
+			
+			pstmt.executeUpdate();		// 실헹문 (delete는 Update로 실행)
+			
+		}	
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}	
+	}	// delete 종료 
+	
+	
+	public void modify(String bid, String bname, String btitle, String bcontent) {  // 사용자가 입력한 3개의 값과 숨긴 bid 값을 받음
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		
+		try {
+			conn = dataSource.getConnection();
+			String sql = "UPDATE mvc_board SET bname=?, btitle=?, bcontent=? WHERE bid=?";  // 어느값이 들어올 지 모르므로 ? 처리함
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, bname);
+			pstmt.setString(2, btitle);
+			pstmt.setString(3, bcontent);
+			pstmt.setInt(4, Integer.parseInt(bid));		// integer로 변경해서 값을 넣어줌
+			
+			pstmt.executeUpdate();		// integer 반환할 수 있음, 실헹문
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conn != null) {
+					conn.close();
+				}
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	} // modify 종료
 }
